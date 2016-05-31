@@ -202,8 +202,8 @@ class argcol(object):
 
 
 def lazy_dict(*keys):
-        d = dict.fromkeys(keys)
-        return [d] + list(map(argcol(partial(get_path, Shadow(d))), keys))
+    d = dict.fromkeys(keys)
+    return [d] + list(map(argcol(partial(get_path, Shadow(d))), keys))
 
 
 # -- tests: --------------------------------------------------------------------
