@@ -35,11 +35,11 @@ class Lazy(object):
 
     def __iter__(self):
         if self.cache is not Empty:
-            if isinstance(self.cache, CircularReference):
-                raise self.cache
+            if self.cache is CircularReference:
+                raise self.cache('at: {}'.format(self))
             yield self.cache
         else:
-            self.cache = CircularReference('at: {}'.format(self))
+            self.cache = CircularReference
             for f, args, kwargs in eval((self.f, self.args, self.kwargs)):
                 for maybe_lazy in f(*args, **kwargs):
                     for x in eval(maybe_lazy):
@@ -264,3 +264,9 @@ if __name__ == '__main__':
     print(list(lstr(foreach([' a ', ' b ', ' c '])).strip().upper()))
 
     print(list(foreach(lazy(random.sample)(range(10), 5))))
+
+    root['params']['list'] = ~params.list
+    
+    try: list(eval(root))
+    except CircularReference: pass
+    else: raise
